@@ -14,7 +14,9 @@ export type AuthenticationStatus =
   | 'authenticated';
 
 export interface AuthenticationAdapter<Message> {
-  getNonce: () => Promise<string>;
+  getNonce: (args: {
+    address: string
+  }) => Promise<string>;
   createMessage: (args: {
     nonce: string;
     address: string;

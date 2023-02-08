@@ -25,10 +25,16 @@ export function SignIn({ onClose }: { onClose: () => void }) {
   }>({ status: 'idle' });
 
   const authAdapter = useAuthenticationAdapter();
+  const { address } = useAccount();
 
   const getNonce = useCallback(async () => {
     try {
-      const nonce = await authAdapter.getNonce();
+
+      if (!address) {
+        return;
+      }
+
+      const nonce = await authAdapter.getNonce({address});
       setState(x => ({ ...x, nonce }));
     } catch (error) {
       setState(x => ({
@@ -51,7 +57,6 @@ export function SignIn({ onClose }: { onClose: () => void }) {
   }, [getNonce]);
 
   const mobile = isMobile();
-  const { address } = useAccount();
   const { chain: activeChain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
   const { disconnect } = useDisconnect();
